@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -8,14 +8,20 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useMutation } from '@apollo/client/react';
+import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { REGISTER_MUTATION } from '../../lib/graphql/mutations';
 import type { AuthPayload } from '../../types';
+import { AuthContext } from '../../navigation/RootNavigator';
+import type { RootStackParamList } from '../../navigation/RootNavigator';
 
 interface RegisterData {
   register: AuthPayload;
 }
+
+type RegisterNavProp = StackNavigationProp<RootStackParamList, 'Register'>;
 
 export default function RegisterForm() {
   const [form, setForm] = useState({
@@ -26,6 +32,9 @@ export default function RegisterForm() {
     numeroCel: '',
   });
   const [error, setError] = useState('');
+
+  const navigation = useNavigation<RegisterNavProp>();
+  const { signIn } = useContext(AuthContext) as { signIn: (t: string, u: object) => Promise<void>; signOut: () => Promise<void> };
 
   const [register, { loading }] = useMutation<RegisterData>(REGISTER_MUTATION);
 
@@ -39,13 +48,14 @@ export default function RegisterForm() {
     try {
       const { data } = await register({ variables: form });
       if (data?.register) {
-        await AsyncStorage.setItem('token', data.register.token);
-        await AsyncStorage.setItem('user', JSON.stringify(data.register.user));
         Toast.show({
           type: 'success',
           text1: 'Registro exitoso',
           text2: 'Bienvenido a Ticky 🎉',
         });
+        // signIn guarda el token y dispara el re-render de RootNavigator
+        // → React Navigation muestra automáticamente el TabNavigator
+        await signIn(data.register.token, data.register.user);
       }
     } catch (err: any) {
       const message = err.message || 'Error al registrarse';
@@ -116,7 +126,10 @@ export default function RegisterForm() {
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>¿Ya tienes cuenta?</Text>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          id="register-go-login-btn"
+          onPress={() => navigation.navigate('Login')}
+        >
           <Text style={styles.link}> Inicia sesión</Text>
         </TouchableOpacity>
       </View>

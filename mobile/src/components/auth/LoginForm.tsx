@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -9,19 +9,28 @@ import {
   Alert,
 } from 'react-native';
 import { useMutation } from '@apollo/client/react';
+import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { LOGIN_MUTATION } from '../../lib/graphql/mutations';
 import type { AuthPayload } from '../../types';
+import { AuthContext } from '../../navigation/RootNavigator';
+import type { RootStackParamList } from '../../navigation/RootNavigator';
 
 interface LoginData {
   login: AuthPayload;
 }
 
+type LoginNavProp = StackNavigationProp<RootStackParamList, 'Login'>;
+
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const navigation = useNavigation<LoginNavProp>();
+  const { signIn } = useContext(AuthContext) as { signIn: (t: string, u: object) => Promise<void>; signOut: () => Promise<void> };
 
   const [login, { loading }] = useMutation<LoginData>(LOGIN_MUTATION);
 
@@ -30,16 +39,14 @@ export default function LoginForm() {
     try {
       const { data } = await login({ variables: { email, password } });
       if (data?.login) {
-        await AsyncStorage.setItem('token', data.login.token);
-        await AsyncStorage.setItem('user', JSON.stringify(data.login.user));
         Toast.show({
           type: 'success',
           text1: 'Inicio de sesión exitoso',
           text2: 'Bienvenido de nuevo 👋',
         });
-        // La navegación cambiará automáticamente gracias al estado global de sesión
-        // (por ejemplo, usando un contexto de autenticación o re-render de RootNavigator)
-        // No se usa window.location.
+        // signIn guarda el token y dispara el re-render de RootNavigator
+        // → React Navigation muestra automáticamente el TabNavigator
+        await signIn(data.login.token, data.login.user);
       }
     } catch (err: any) {
       const message = err.message || 'Error al iniciar sesión';
@@ -93,7 +100,10 @@ export default function LoginForm() {
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>¿No tienes cuenta?</Text>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          id="login-go-register-btn"
+          onPress={() => navigation.navigate('Register')}
+        >
           <Text style={styles.link}> Regístrate</Text>
         </TouchableOpacity>
       </View>
