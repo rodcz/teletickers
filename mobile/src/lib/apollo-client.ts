@@ -10,8 +10,10 @@ import {
   Observable,
 } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
-const GRAPHQL_URL = process.env.EXPO_PUBLIC_GRAPHQL_URL ?? 'http://10.0.2.2:8080/graphql';
+const DEFAULT_URL = Platform.OS === 'android' ? 'http://10.0.2.2:8080/graphql' : 'http://localhost:8080/graphql';
+const GRAPHQL_URL = process.env.EXPO_PUBLIC_GRAPHQL_URL ?? DEFAULT_URL;
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_URL,
