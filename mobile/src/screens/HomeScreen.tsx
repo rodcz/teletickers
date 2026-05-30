@@ -1,47 +1,78 @@
-import React, { useState, useCallback } from 'react';
-import { StyleSheet, FlatList, RefreshControl, ListRenderItemInfo, SafeAreaView } from 'react-native';
+import React, { useCallback } from 'react';
+import { StyleSheet, FlatList, RefreshControl, ListRenderItemInfo, View, Text, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useQuery } from '@apollo/client/react';
+import { GET_EVENTOS_PUBLICADOS } from '../lib/graphql/queries';
 import { EventCard } from '../components/events/EventCard';
 import { BannerCarousel } from '../components/events/BannerCarousel';
+import type { Evento } from '../types';
 
-const mockEvents = [
-  { id: '101', title: 'Concierto de Rock en Vivo', date: '25 Oct 2026', imageUrl: 'https://picsum.photos/seed/rock/800/400' },
-  { id: '102', title: 'Obra de Teatro: Hamlet', date: '02 Nov 2026', imageUrl: 'https://picsum.photos/seed/hamlet/800/400' },
-  { id: '103', title: 'Festival Internacional de Cine', date: '15 Nov 2026', imageUrl: 'https://picsum.photos/seed/cinefest/800/400' },
-];
+type EventosData = {
+  eventosPublicados: Evento[];
+};
 
-export const HomeScreen = () => {
-  const [refreshing, setRefreshing] = useState(false);
-  const [events, setEvents] = useState(mockEvents);
+export const HomeScreen = ({ navigation }: any) => {
+  const { data, loading, refetch } = useQuery<EventosData>(GET_EVENTOS_PUBLICADOS, {
+    fetchPolicy: 'cache-and-network',
+  });
 
   const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    // TODO: Replace with actual Apollo GraphQL refetch
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1500);
-  }, []);
+    refetch();
+  }, [refetch]);
 
-  const renderItem = ({ item }: ListRenderItemInfo<typeof mockEvents[0]>) => (
+  const renderItem = ({ item }: ListRenderItemInfo<Evento>) => (
     <EventCard 
       id={item.id}
-      title={item.title}
-      date={item.date}
-      imageUrl={item.imageUrl}
-      onPress={() => console.log('Navigate to details', item.id)}
+      title={item.titulo}
+      date={item.fecha}
+      imageUrl={item.miniatura || 'https://picsum.photos/seed/evento/800/400'}
+      onPress={() => navigation?.navigate?.('EventDetail', { id: item.id })}
     />
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <FlatList
-        data={events}
+        data={data?.eventosPublicados ?? []}
         renderItem={renderItem}
         keyExtractor={item => item.id}
-        ListHeaderComponent={<BannerCarousel />}
+        ListHeaderComponent={
+          <>
+            {/* Header / Search Placeholder tipo Apple */}
+            <View style={styles.header}>
+              <Text style={styles.largeTitle}>Descubrir</Text>
+              <Pressable 
+                style={styles.searchBar} 
+                onPress={() => navigation?.navigate?.('Search')}
+              >
+                <Text style={styles.searchIcon}>🔍</Text>
+                <Text style={styles.searchText}>Buscar eventos, artistas o lugares</Text>
+              </Pressable>
+            </View>
+
+            <BannerCarousel />
+
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Recomendados para ti</Text>
+              <Pressable onPress={() => navigation?.navigate?.('Search')}>
+                <Text style={styles.seeAll}>Ver todos</Text>
+              </Pressable>
+            </View>
+          </>
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            {loading ? (
+              <Text style={styles.emptyText}>Cargando los mejores eventos...</Text>
+            ) : (
+              <Text style={styles.emptyText}>No hay eventos disponibles aún.</Text>
+            )}
+          </View>
+        }
         contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl 
-            refreshing={refreshing} 
+            refreshing={loading} 
             onRefresh={onRefresh} 
             tintColor="#3b82f6" 
             colors={['#3b82f6']} 
@@ -57,7 +88,64 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8fafc',
   },
+  header: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 4,
+  },
+  largeTitle: {
+    fontSize: 34,
+    fontWeight: '900',
+    color: '#0f172a',
+    marginBottom: 16,
+    letterSpacing: -0.5,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#e2e8f0',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 8,
+  },
+  searchIcon: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+  searchText: {
+    fontSize: 16,
+    color: '#64748b',
+    fontWeight: '500',
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#0f172a',
+    letterSpacing: -0.5,
+  },
+  seeAll: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#16a34a',
+  },
   listContent: {
     paddingBottom: 24,
+  },
+  emptyContainer: {
+    padding: 32,
+    alignItems: 'center',
+  },
+  emptyText: {
+    color: '#64748b',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
