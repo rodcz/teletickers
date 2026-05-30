@@ -11,11 +11,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, typography, spacing } from '../styles/theme';
 
 // ── Importar pantallas ──────────────────────────────────────────────────────
-// Rodrigo: HomeScreen, MyEventsScreen
-// Josue: SearchScreen, ProfileScreen
-// Daniel: MyTicketsScreen
-// Pantallas aún no implementadas por los compañeros → placeholders por ahora
 import MyTicketsScreen from '../screens/MyTicketsScreen';
+import { HomeScreen } from '../screens/HomeScreen';
+import { MyEventsScreen } from '../screens/MyEventsScreen';
 
 // Placeholders para pantallas de otros compañeros (se reemplazarán con los merges del equipo)
 const PlaceholderScreen = ({ name }: { name: string }) => (
@@ -23,9 +21,7 @@ const PlaceholderScreen = ({ name }: { name: string }) => (
     <Text style={{ color: colors.textSecondary, fontSize: typography.base }}>{name}</Text>
   </View>
 );
-const HomeScreen = () => <PlaceholderScreen name="Inicio — Rodrigo" />;
 const SearchScreen = () => <PlaceholderScreen name="Buscar — Josue" />;
-const MyEventsScreen = () => <PlaceholderScreen name="Mis Eventos — Rodrigo" />;
 const ProfileScreen = () => <PlaceholderScreen name="Perfil — Josue" />;
 
 // ── Tipos de navegación ─────────────────────────────────────────────────────
