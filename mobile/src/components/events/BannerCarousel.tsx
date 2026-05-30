@@ -15,9 +15,9 @@ interface BannerCarouselProps {
 }
 
 const mockBanners: BannerProps[] = [
-  { id: '1', imageUrl: 'https://images.unsplash.com/photo-1540039155733-d71efd45160b?q=80&w=800&auto=format&fit=crop', title: 'Gran Concierto de Verano' },
-  { id: '2', imageUrl: 'https://images.unsplash.com/photo-1507676184212-d0330a151f84?q=80&w=800&auto=format&fit=crop', title: 'Obra de Teatro Clásica' },
-  { id: '3', imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop', title: 'Festival de Cine Independiente' },
+  { id: '1', imageUrl: 'https://picsum.photos/seed/concert/800/400', title: 'Gran Concierto de Verano' },
+  { id: '2', imageUrl: 'https://picsum.photos/seed/teatro/800/400', title: 'Obra de Teatro Clásica' },
+  { id: '3', imageUrl: 'https://picsum.photos/seed/cine/800/400', title: 'Festival de Cine Independiente' },
 ];
 
 export const BannerCarousel = ({ banners = mockBanners }: BannerCarouselProps) => {
