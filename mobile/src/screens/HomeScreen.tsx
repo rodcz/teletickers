@@ -43,7 +43,7 @@ export const HomeScreen = ({ navigation }: any) => {
               <Text style={styles.largeTitle}>Descubrir</Text>
               <Pressable 
                 style={styles.searchBar} 
-                onPress={() => navigation?.navigate?.('Search')}
+                onPress={() => navigation?.navigate?.('Buscar')}
               >
                 <Text style={styles.searchIcon}>🔍</Text>
                 <Text style={styles.searchText}>Buscar eventos, artistas o lugares</Text>
@@ -54,7 +54,7 @@ export const HomeScreen = ({ navigation }: any) => {
 
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Recomendados para ti</Text>
-              <Pressable onPress={() => navigation?.navigate?.('Search')}>
+              <Pressable onPress={() => navigation?.navigate?.('Buscar')}>
                 <Text style={styles.seeAll}>Ver todos</Text>
               </Pressable>
             </View>
