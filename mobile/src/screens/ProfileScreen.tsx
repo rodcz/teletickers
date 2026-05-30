@@ -12,7 +12,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery } from '@apollo/client/react';
 import { LineChart, PieChart } from 'react-native-chart-kit';
 import { GET_DASHBOARD_METRICS } from '../lib/graphql/queries';
-import { useAuth } from '../context/AuthContext';
+import { AuthContext } from '../navigation/RootNavigator';
+import { useContext } from 'react';
 
 interface DashboardMetrics {
   totalEventos: number;
@@ -55,13 +56,14 @@ const baseChartConfig = {
   backgroundGradientFrom: '#FFFFFF',
   backgroundGradientTo: '#FFFFFF',
   decimalPlaces: 0,
-  labelColor: () => '#64748B',
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  labelColor: (opacity = 1) => `rgba(100, 116, 139, ${opacity})`,
   propsForDots: { r: '4', strokeWidth: '2' },
   propsForBackgroundLines: { stroke: '#E2E8F0' },
 };
 
 export default function ProfileScreen({ navigation }: any) {
-  const { user, signOut } = useAuth();
+  const { user, signOut } = useContext(AuthContext) as { user: any, signOut: () => Promise<void> };
   const { data, loading } = useQuery<DashboardData>(GET_DASHBOARD_METRICS, {
     fetchPolicy: 'cache-and-network',
   });
