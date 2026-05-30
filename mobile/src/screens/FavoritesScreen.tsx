@@ -64,13 +64,13 @@ export default function FavoritesScreen({ navigation }: any) {
   const eventos = data?.eventosPublicados ?? [];
 
   const favoritos = useMemo(
-    () => eventos.filter((evento) => favoriteIds.includes(evento.id)),
+    () => eventos.filter((evento: any) => favoriteIds.includes(evento.id)),
     [eventos, favoriteIds]
   );
 
   const upcomingCount = useMemo(
     () =>
-      favoritos.filter((evento) => {
+      favoritos.filter((evento: any) => {
         const eventDate = new Date(evento.fecha);
         return !Number.isNaN(eventDate.getTime()) && eventDate > new Date();
       }).length,
@@ -123,7 +123,7 @@ export default function FavoritesScreen({ navigation }: any) {
               </View>
               <View style={styles.statCard}>
                 <Text style={styles.statValue}>
-                  {new Set(favoritos.map((evento) => evento.categoria)).size}
+                  {new Set(favoritos.map((evento: any) => evento.categoria)).size}
                 </Text>
                 <Text style={styles.statLabel}>Categorías</Text>
               </View>

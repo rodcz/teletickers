@@ -42,16 +42,16 @@ export default function MyTicketsScreen({ navigation }: any) {
 
   const counters = useMemo(
     () => ({
-      pagado: compras.filter((item) => item.estadoPago === "pagado").length,
-      pendiente: compras.filter((item) => item.estadoPago === "pendiente").length,
-      cancelado: compras.filter((item) => item.estadoPago === "cancelado").length,
+      pagado: compras.filter((item: any) => item.estadoPago === "pagado").length,
+      pendiente: compras.filter((item: any) => item.estadoPago === "pendiente").length,
+      cancelado: compras.filter((item: any) => item.estadoPago === "cancelado").length,
       total: compras.length,
     }),
     [compras]
   );
 
   const filteredTickets = useMemo(
-    () => compras.filter((item) => item.estadoPago === selectedFilter),
+    () => compras.filter((item: any) => item.estadoPago === selectedFilter),
     [compras, selectedFilter]
   );
 

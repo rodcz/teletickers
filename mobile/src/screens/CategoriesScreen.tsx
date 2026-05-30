@@ -75,7 +75,7 @@ export default function CategoriesScreen({ navigation }: any) {
   const countsByCategory = useMemo(() => {
     return CATEGORIES.reduce<Record<string, number>>((acc, category) => {
       acc[category.slug] = eventos.filter(
-        (evento) =>
+        (evento: any) =>
           evento.categoria?.trim().toLowerCase() ===
           category.slug.trim().toLowerCase()
       ).length;
