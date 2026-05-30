@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { GET_EVENTOS_PUBLICADOS } from "../lib/graphql/queries";
 import CategoryCard, {
   CategoryItem,

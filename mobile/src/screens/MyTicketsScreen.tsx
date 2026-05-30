@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { GET_MIS_COMPRAS } from "../lib/graphql/queries";
 import QRCodeModal from "../components/tickets/QRCodeModal";
 import TicketCard, { CompraTicket } from "../components/tickets/TicketCard";
