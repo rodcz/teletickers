@@ -4,9 +4,9 @@ import { EventCard } from '../components/events/EventCard';
 import { BannerCarousel } from '../components/events/BannerCarousel';
 
 const mockEvents = [
-  { id: '101', title: 'Concierto de Rock en Vivo', date: '25 Oct 2026', imageUrl: 'https://via.placeholder.com/800x400/0f172a/ffffff?text=Rock' },
-  { id: '102', title: 'Obra de Teatro: Hamlet', date: '02 Nov 2026', imageUrl: 'https://via.placeholder.com/800x400/1e293b/ffffff?text=Teatro' },
-  { id: '103', title: 'Festival Internacional de Cine', date: '15 Nov 2026', imageUrl: 'https://via.placeholder.com/800x400/334155/ffffff?text=Cine' },
+  { id: '101', title: 'Concierto de Rock en Vivo', date: '25 Oct 2026', imageUrl: 'https://images.unsplash.com/photo-1540039155733-d71efd45160b?q=80&w=800&auto=format&fit=crop' },
+  { id: '102', title: 'Obra de Teatro: Hamlet', date: '02 Nov 2026', imageUrl: 'https://images.unsplash.com/photo-1507676184212-d0330a151f84?q=80&w=800&auto=format&fit=crop' },
+  { id: '103', title: 'Festival Internacional de Cine', date: '15 Nov 2026', imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop' },
 ];
 
 export const HomeScreen = () => {

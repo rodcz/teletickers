@@ -28,15 +28,23 @@ export const EventCard = ({ title, date, imageUrl, onPress }: EventCardProps) =>
 
   return (
     <>
-      <Pressable style={styles.card} onPress={onPress}>
-        <Image source={{ uri: imageUrl }} style={styles.image} contentFit="cover" />
+      <Pressable 
+        style={({ pressed }) => [styles.card, pressed && styles.cardPressed]} 
+        onPress={onPress}
+      >
+        <Image 
+          source={{ uri: imageUrl }} 
+          style={styles.image} 
+          contentFit="cover" 
+          transition={300}
+        />
         <View style={styles.content}>
           <View style={styles.textContainer}>
             <Text style={styles.title} numberOfLines={1}>{title}</Text>
             <Text style={styles.date}>{date}</Text>
           </View>
-          <Pressable style={styles.menuButton} onPress={handleOpenMenu} hitSlop={10}>
-            <Feather name="more-vertical" size={20} color="#64748b" />
+          <Pressable style={styles.menuButton} onPress={handleOpenMenu} hitSlop={15}>
+            <Feather name="more-horizontal" size={24} color="#64748b" />
           </Pressable>
         </View>
       </Pressable>
@@ -65,22 +73,29 @@ export const EventCard = ({ title, date, imageUrl, onPress }: EventCardProps) =>
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#ffffff',
-    borderRadius: 16,
+    borderRadius: 24,
     marginHorizontal: 16,
-    marginBottom: 16,
+    marginBottom: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 4,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#f1f5f9',
+  },
+  cardPressed: {
+    transform: [{ scale: 0.98 }],
+    shadowOpacity: 0.04,
   },
   image: {
     width: '100%',
-    height: 160,
+    height: 180,
+    backgroundColor: '#e2e8f0', // placeholder color while loading
   },
   content: {
-    padding: 16,
+    padding: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -90,17 +105,21 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '800',
     color: '#0f172a',
-    marginBottom: 4,
+    marginBottom: 6,
+    letterSpacing: -0.5,
   },
   date: {
-    fontSize: 14,
-    color: '#64748b',
+    fontSize: 15,
+    color: '#16a34a', // theme primary color for dates
+    fontWeight: '600',
   },
   menuButton: {
-    padding: 4,
+    padding: 8,
+    backgroundColor: '#f8fafc',
+    borderRadius: 20,
   },
   sheetContent: {
     flex: 1,
